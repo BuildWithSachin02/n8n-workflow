@@ -1,0 +1,200 @@
+{
+  "name": "My workflow",
+  "nodes": [
+    {
+      "parameters": {
+        "formTitle": "Contact Us",
+        "formFields": {
+          "values": [
+            {
+              "fieldName": "Name",
+              "fieldLabel": "What is your name",
+              "requiredField": true
+            },
+            {
+              "fieldName": "Email",
+              "fieldLabel": "What's  your email",
+              "fieldType": "email",
+              "requiredField": true
+            },
+            {
+              "fieldName": "Phone",
+              "fieldLabel": "what's your phone number",
+              "fieldType": "number",
+              "requiredField": true
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.formTrigger",
+      "typeVersion": 2.4,
+      "position": [
+        -480,
+        0
+      ],
+      "id": "74d43a74-7f94-47b2-8702-e9763ebbd71c",
+      "name": "On form submission",
+      "webhookId": "b77b38aa-31e6-4756-9e1f-a980a840f3fd"
+    },
+    {
+      "parameters": {
+        "sendTo": "={{ $json.Email }}",
+        "subject": "Thanks for contacting us – We received your message",
+        "message": "=<h2>Thank you for contacting us!</h2>  <p>Hi <strong>{{ $json.Name }}</strong>,</p>  <p>We have received your message and our team will get back to you shortly.</p>  <hr>  <h3>Your submitted details:</h3>  <ul>   <li><strong>Name:</strong> {{ $json.Name }}</li>   <li><strong>Email:</strong> {{ $json.Email }}</li>   <li><strong>Phone:</strong> {{ $json.Phone }}</li> </ul>  <p><strong>Submitted at:</strong> {{ $json.submittedAt }}</p>  <br>  <p>Best regards,<br> <strong>Support Team</strong></p>",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.2,
+      "position": [
+        -16,
+        0
+      ],
+      "id": "94e5669f-cb16-4024-8b21-c11ff00cf4c7",
+      "name": "Send a message",
+      "webhookId": "0bddfd70-3098-41a7-8262-52dbd6c34e1d",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "rhRHo6fG1a1Jh84o",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "1cl4J_7MTk0wBnb6cPuNcfVzoKLXUX-r8so9qgFqpjWs",
+          "mode": "list",
+          "cachedResultName": "n8n-google-sheets",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1cl4J_7MTk0wBnb6cPuNcfVzoKLXUX-r8so9qgFqpjWs/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Sheet1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1cl4J_7MTk0wBnb6cPuNcfVzoKLXUX-r8so9qgFqpjWs/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Name": "={{ $json.Name }}",
+            "Email": "={{ $json.Email }}",
+            "Phone": "={{ $json.Phone }}",
+            "submittedAt": "={{ $json.submittedAt }}",
+            "formMode": "={{ $json.formMode }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "Name",
+              "displayName": "Name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Email",
+              "displayName": "Email",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Phone",
+              "displayName": "Phone",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "submittedAt",
+              "displayName": "submittedAt",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "formMode",
+              "displayName": "formMode",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        -224,
+        0
+      ],
+      "id": "a6b08d22-e492-4814-8014-55842a302220",
+      "name": "Append row in sheet",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "DMR9XYvJ9xTSpkoV",
+          "name": "Google Sheets account 2"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "On form submission": {
+      "main": [
+        [
+          {
+            "node": "Append row in sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Append row in sheet": {
+      "main": [
+        [
+          {
+            "node": "Send a message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "availableInMCP": false
+  },
+  "versionId": "222e9288-68f5-41e7-8e8b-94b69c4e205f",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "4cf9d8532a03194d8e42020666e9bd0ea0d5b826ba6ba444f4d24b07a2d66ef6"
+  },
+  "id": "YDjAm1dmR3Def8A7",
+  "tags": []
+}
