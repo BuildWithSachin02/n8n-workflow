@@ -4,7 +4,7 @@ This repository contains automation workflows built using **n8n**, a powerful op
 
 The purpose of this repository is to demonstrate how real-world business processes can be automated without traditional backend code, using APIs, triggers, and integrations.
 
-----
+---
 
 ## 🚀 What is n8n?
 
